@@ -27,7 +27,7 @@ class game_env:
         self.LS_blocks = []
         self.t_blocks = []
         self.dead = False
-        pygame.display.set_caption("My Game")+
+        pygame.display.set_caption("PyTetris")
 
         # Loop until the user clicks the close button.
         done = False
@@ -93,7 +93,6 @@ class game_env:
                 self.new_block = False
             self.block_call[self.block_index]()
             #self.checkTop()
-            self.checkTetris()
             for item in self.block_list:
                 pygame.draw.rect(self.screen, item[2], [item[0],
                                 item[1], self.block_size, self.block_size])
@@ -125,6 +124,7 @@ class game_env:
             self.rect_x = 250
             self.new_block = True
             self.rot_pos = 0
+            self.checkTetris()
     def long_block(self):
         if self.rot_pos == 0 or self.rot_pos == 2:
             self.long_blocks = [(self.rect_x, self.rect_y), 
@@ -159,6 +159,7 @@ class game_env:
             self.rect_x = 250
             self.new_block = True
             self.rot_pos = 0
+            self.checkTetris()
             return 0 
     def right_L(self):
         if self.rot_pos == 0:
@@ -204,6 +205,7 @@ class game_env:
             self.rect_x = 250
             self.new_block = True
             self.rot_pos = 0
+            self.checkTetris()
             return 0     
     def left_L(self):
         if self.rot_pos == 0:
@@ -249,6 +251,7 @@ class game_env:
             self.rect_x = 250
             self.new_block = True
             self.rot_pos = 0
+            self.checkTetris()
             return 0        
     def right_S(self):
         if self.rot_pos == 0 or self.rot_pos == 2:
@@ -285,6 +288,7 @@ class game_env:
             self.rect_x = 250
             self.new_block = True
             self.rot_pos = 0
+            self.checkTetris()
             return 0        
     def left_S(self):
         if self.rot_pos == 0 or self.rot_pos == 2:
@@ -320,6 +324,7 @@ class game_env:
             self.rect_x = 250
             self.new_block = True
             self.rot_pos = 0
+            self.checkTetris()
             return 0        
     def t_block(self):
         if self.rot_pos == 0:
@@ -365,6 +370,7 @@ class game_env:
             self.rect_x = 250
             self.new_block = True
             self.rot_pos = 0
+            self.checkTetris()
             return 0        
     def rotate(self):
         if self.rot_pos == 3:
@@ -452,11 +458,14 @@ class game_env:
             for row in row_list:
                 self.deleteRow(row)
     def deleteRow(self, row_val):
+        pop_list = []
         for index, item in enumerate(self.block_list):
             if item[1] == row_val:
-                self.block_list.pop(index)
-            elif item[1] < row_val:
+                pop_list.append(index)
+            if item[1] < row_val:
                 self.block_list[index] = (item[0], item[1]+self.block_size, item[2])
+        for index in sorted(pop_list, reverse=True):
+            self.block_list.pop(index)
 
 
 def main():
