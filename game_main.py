@@ -3,8 +3,11 @@
 import random
 
 import pygame
-import winsound
 
+pygame.init()
+pygame.mixer.init(22050, -8, 16, 65536 )
+dead_sound = pygame.mixer.Sound("dead.wav")
+remove_sound = pygame.mixer.Sound("dead.wav")
 class game_env:
     def __init__(self):
         self.BLACK = (0, 0, 0)
@@ -17,8 +20,7 @@ class game_env:
         self.LIME = (0, 247, 66)
         self.PURPLE = (155, 46, 201)
         self.TEAL = (0,128,128)
-        pygame.init()
-        pygame.mixer.init(22050, -8, 16, 65536 )
+
         self.size = (530, 700)
         self.block_size = 30
         self.screen = pygame.display.set_mode(self.size)
@@ -43,6 +45,8 @@ class game_env:
         self.DARK_BLUE = (3, 86, 252)
         self.move_down_time = self.slow_speed
         pygame.display.set_caption("PyTetris")
+        
+        
 
         # Loop until the user clicks the close button.
         done = False
@@ -206,7 +210,7 @@ class game_env:
             return 0 
     def right_L(self):
         first = False
-        for i in range(0,2):
+        for _ in range(2):
             if self.rot_pos == 0:
                 self.RL_blocks = [(self.rect_x, self.rect_y), 
                                     (self.rect_x-self.block_size, self.rect_y), 
@@ -532,8 +536,7 @@ class game_env:
             self.clock.tick(60)
         pygame.mixer.music.unpause()
     def deadLog(self):
-        winsound.PlaySound("dead.wav", 1)
-        pygame.mixer.music.pause()
+        pygame.mixer.Sound.play(dead_sound)
         while self.dead:
             pos = pygame.mouse.get_pos()
             if pos[0] >= 200 and pos[0] <= 300 and pos[1] >= 300 and pos[1] <= 340:
@@ -613,7 +616,7 @@ class game_env:
                 self.deleteRow(row)
     def deleteRow(self, row_val):
         pop_list = []
-        winsound.PlaySound("remove.wav", 1)
+        pygame.mixer.Sound.play(remove_sound)
         for index, item in enumerate(self.block_list):
             if item[1] == row_val:
                 pop_list.append(index)
